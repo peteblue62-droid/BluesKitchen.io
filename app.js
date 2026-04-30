@@ -339,10 +339,14 @@ function normalizeRecipe(recipe) {
   const main = recipe.ingredients[0] || recipe.title;
   const side = recipe.ingredients[1] || "配菜";
   const flavor = recipe.title.slice(0, 2);
+  const detailedSteps = recipe.category.includes("dessert")
+    ? buildDessertSteps(recipe.title, recipe.ingredients)
+    : buildDetailedSteps(recipe.title, recipe.ingredients, main, side, flavor, recipe.category.includes("quick"));
   return {
     ...recipe,
     description: recipe.description || `${recipe.title}适合日常做饭，按份量准备食材更容易成功。`,
-    steps: recipe.steps.length >= 5 ? recipe.steps : buildDetailedSteps(recipe.title, recipe.ingredients, main, side, flavor, true)
+    steps: recipe.steps.length >= 8 ? recipe.steps : detailedSteps,
+    tip: recipe.tip || getRecipeTip({ ...recipe, category: recipe.category || [], difficulty: recipe.difficulty || "简单" })
   };
 }
 
@@ -350,12 +354,14 @@ function buildDetailedSteps(title, ingredients, main, side, flavor, isQuick) {
   const prepItems = ingredients.slice(0, 4).join("、");
   const cookTime = isQuick ? "3 到 5 分钟" : "15 到 25 分钟";
   return [
-    `备料：按用料表准备${prepItems}，肉类切成均匀小块或薄片，蔬菜洗净沥干。`,
-    `腌制和调味：${main}加少量盐、生抽和淀粉抓匀，静置 10 分钟；素菜可省略腌制。`,
-    `先处理主料：热锅放油，把${main}煎炒到表面变色或微微焦香，盛出备用。`,
-    `炒香配菜：锅里留底油，放入蒜姜葱等香料，再加入${side}炒到断生。`,
-    `合炒收汁：倒回${main}，加入${flavor}调味料和少量热水，翻炒或焖煮${cookTime}。`,
-    `完成：尝一下咸淡，汤汁浓稠后出锅；想拌饭可以多留一点汁。`
+    `准备食材：按用料表称量或估量${prepItems}，把需要解冻的食材提前回温，蔬菜洗净后充分沥干。`,
+    `切配：${main}切成大小接近的块、片或条，${side}切成容易入口的大小；蒜姜葱分开放，方便按顺序下锅。`,
+    `腌制主料：${main}加少量盐、生抽和一点淀粉抓匀，静置 10 分钟；如果是豆腐或蔬菜，改为提前控水。`,
+    `调好碗汁：把${flavor}需要的酱料提前混合，旁边备 2 到 3 汤匙热水，避免下锅后手忙脚乱。`,
+    `先处理主料：锅烧热再放油，把${main}煎炒到表面变色或微微焦香，盛出备用，锅底香味保留。`,
+    `炒香配菜：锅里留底油，放入蒜姜葱等香料，再加入${side}，用中大火炒到断生但仍有口感。`,
+    `合炒收汁：倒回${main}，加入调好的酱汁和少量热水，翻炒或焖煮${cookTime}，让味道进入食材。`,
+    `出锅判断：汤汁能挂在食材表面、咸淡合适即可关火；装盘后静置 1 分钟，味道会更稳定。`
   ];
 }
 
@@ -400,12 +406,14 @@ function buildDessertRecipes() {
 function buildDessertSteps(title, ingredients) {
   const main = ingredients[0] || title;
   return [
-    `称量：按用料表提前称好${ingredients.slice(0, 4).join("、")}，甜品尽量不要凭感觉加料。`,
-    `预处理：${main}洗净、切块或泡发；需要融化的黄油、巧克力、吉利丁提前隔水处理。`,
-    "混合：先把液体材料搅匀，再加入粉类或凝固材料，搅到顺滑无明显颗粒。",
-    "加热或烘烤：小火加热时不断搅拌；进烤箱时先预热，观察表面上色。",
-    "定型：需要冷藏的甜品至少冷藏 2 小时，需要回温的甜品放凉后再切。",
-    "装盘：表面可以加水果、坚果、桂花或糖粉，吃前再点缀口感最好。"
+    `称量：按用料表提前称好${ingredients.slice(0, 4).join("、")}，甜品尽量用固定勺或厨房秤，成功率更高。`,
+    `预处理：${main}洗净、切块、泡发或回温；需要融化的黄油、巧克力、吉利丁提前隔水处理。`,
+    "混合液体：先把牛奶、淡奶油、蛋液或椰奶搅匀，糖要完全融化，口感才会细腻。",
+    "加入粉类或凝固材料：分次加入粉类、吉利丁或芝士材料，边加边搅，避免结块。",
+    "过筛或刮平：需要细滑口感的甜品过筛一次；需要烘烤的甜品表面抹平，受热更均匀。",
+    "加热或烘烤：小火加热时不断搅拌；进烤箱时先预热，观察边缘和表面颜色。",
+    "冷却定型：需要冷藏的甜品至少冷藏 2 小时，需要切块的甜品完全放凉后再切。",
+    "装盘：表面可以加水果、坚果、桂花或糖粉，吃前再点缀，口感和外观都会更好。"
   ];
 }
 
@@ -433,6 +441,8 @@ const dialogFavorite = document.querySelector("#dialogFavorite");
 const dialogPhoto = document.querySelector("#dialogPhoto");
 const dialogTip = document.querySelector("#dialogTip");
 const imageSearch = document.querySelector("#imageSearch");
+const toolList = document.querySelector("#toolList");
+const timePlanList = document.querySelector("#timePlanList");
 const addDialog = document.querySelector("#addDialog");
 const addRecipeForm = document.querySelector("#addRecipeForm");
 const installApp = document.querySelector("#installApp");
@@ -580,9 +590,10 @@ function renderRecipes() {
       </div>
       <p>${escapeHtml(recipe.description)}</p>
       <div class="card-meta">
+        <span>${escapeHtml(getCategoryLabel(recipe))}</span>
         <span>${escapeHtml(recipe.time)}</span>
         <span>${escapeHtml(recipe.difficulty)}</span>
-        <span>匹配 ${scoreRecipe(recipe)}</span>
+        <span>${escapeHtml(getReadinessLabel(recipe))}</span>
       </div>
     `;
     card.addEventListener("click", () => openRecipe(recipe.id));
@@ -592,6 +603,22 @@ function renderRecipes() {
     });
     recipeList.appendChild(card);
   });
+}
+
+function getCategoryLabel(recipe) {
+  if (recipe.category.includes("dessert")) return "甜品";
+  if (recipe.category.includes("protein") && recipe.category.includes("vegetable")) return "荤素搭配";
+  if (recipe.category.includes("protein")) return "高蛋白";
+  if (recipe.category.includes("vegetable")) return "多蔬菜";
+  return "家常";
+}
+
+function getReadinessLabel(recipe) {
+  if (!state.pantry.length) return "加食材匹配";
+  const matched = scoreRecipe(recipe);
+  if (matched === 0) return "需备食材";
+  if (matched >= Math.min(3, recipe.ingredients.length)) return "很匹配";
+  return `匹配 ${matched} 样`;
 }
 
 function renderPantry() {
@@ -625,13 +652,58 @@ function openRecipe(id) {
   document.querySelector("#dialogDescription").textContent = recipe.description;
   dialogTip.textContent = recipe.tip || getRecipeTip(recipe);
   renderServings(recipe);
-  document.querySelector("#stepList").innerHTML = recipe.steps.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  renderKitchenAssist(recipe);
+  renderSteps(recipe);
   dialogFavorite.textContent = state.favorites.includes(id) ? "♥" : "♡";
   const photo = getRecipePhoto(recipe);
   dialogPhoto.classList.toggle("hidden", !photo);
   if (photo) dialogPhoto.style.backgroundImage = `url("${photo}")`;
   imageSearch.href = `https://www.bing.com/images/search?q=${encodeURIComponent(`${recipe.title} 菜品 图片`)}`;
   recipeDialog.showModal();
+}
+
+function renderSteps(recipe) {
+  document.querySelector("#stepList").innerHTML = recipe.steps
+    .map(
+      (item, index) => `
+        <li>
+          <label class="step-check">
+            <input type="checkbox" aria-label="完成第 ${index + 1} 步" />
+            <span>${escapeHtml(item)}</span>
+          </label>
+        </li>`
+    )
+    .join("");
+}
+
+function renderKitchenAssist(recipe) {
+  toolList.innerHTML = getTools(recipe).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  timePlanList.innerHTML = getTimePlan(recipe).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+}
+
+function getTools(recipe) {
+  if (recipe.category.includes("dessert")) {
+    const bake = /(蛋糕|挞|布朗尼|松饼|酥)/.test(recipe.title);
+    return bake ? ["厨房秤或量杯", "搅拌碗", "打蛋器", "烤箱或平底锅", "冷却架"] : ["量杯或厨房秤", "小奶锅", "搅拌碗", "筛网", "冷藏容器"];
+  }
+  const soup = /(汤|粥|羹|炖|煲)/.test(recipe.title);
+  const noodle = /(面|粉|饭|饼|粥|丼)/.test(recipe.title);
+  if (soup) return ["汤锅或砂锅", "漏勺", "菜刀和砧板", "汤勺", "计时器"];
+  if (noodle) return ["炒锅或煮锅", "漏勺", "菜刀和砧板", "筷子或夹子", "大碗"];
+  return ["炒锅", "锅铲", "菜刀和砧板", "小碗调酱汁", "厨房纸或沥水篮"];
+}
+
+function getTimePlan(recipe) {
+  if (recipe.category.includes("dessert")) {
+    return ["前 5 分钟称量材料", "中段完成混合或加热", "最后冷藏、放凉或装饰", "吃前再加水果和坚果"];
+  }
+  if (recipe.difficulty === "进阶") {
+    return ["先通读步骤再开火", "前 15 分钟完成切配和腌制", "中段保持小火慢炖或分批处理", "最后 5 分钟尝味并收汁"];
+  }
+  if (recipe.category.includes("quick")) {
+    return ["先切配再开火", "前 5 分钟调好碗汁", "中大火快速翻炒", "出锅前尝咸淡"];
+  }
+  return ["先处理主料", "中段焖煮入味", "最后收汁或调味", "装盘后静置 1 分钟"];
 }
 
 function renderServings(recipe) {
@@ -690,7 +762,32 @@ function buildRecipeImage(recipe) {
   const [bg, main] = recipe.colors || ["#f6ead8", "#d99b45"];
   const garnish = recipe.category.includes("dessert") ? "#f2a0b7" : recipe.category.includes("protein") ? "#c94838" : "#4f9a62";
   const plate = recipe.category.includes("dessert") ? "#fff7fb" : "#fffdf7";
+  const dark = recipe.category.includes("dessert") ? "#7a4a58" : "#3b4d41";
   const title = escapeSvgText(recipe.title.slice(0, 10));
+  const seed = hashText(recipe.id + recipe.title);
+  const labels = recipe.ingredients.slice(0, 3).map((item) => escapeSvgText(item.slice(0, 4)));
+  const isSoup = /(汤|粥|羹|炖|煲|西米露|糊|沙|冻)/.test(recipe.title);
+  const isNoodle = /(面|粉|粉丝|河粉|意面)/.test(recipe.title);
+  const isDessert = recipe.category.includes("dessert");
+  const pieces = labels
+    .map((label, index) => {
+      const x = 222 + ((seed + index * 73) % 190);
+      const y = 168 + ((seed + index * 41) % 120);
+      const r = 22 + ((seed + index * 11) % 15);
+      const color = index === 0 ? garnish : index === 1 ? "#fff4dc" : "#7eb36a";
+      return `<g>
+        <circle cx="${x}" cy="${y}" r="${r}" fill="${color}" opacity="0.92"/>
+        <text x="${x}" y="${y + 6}" text-anchor="middle" font-size="17" font-weight="700" fill="${dark}" font-family="PingFang SC, Microsoft YaHei, sans-serif">${label}</text>
+      </g>`;
+    })
+    .join("");
+  const vessel = isSoup
+    ? `<ellipse cx="320" cy="238" rx="210" ry="122" fill="${plate}"/><ellipse cx="320" cy="230" rx="165" ry="84" fill="${main}" opacity="0.92"/><ellipse cx="320" cy="222" rx="132" ry="58" fill="#fffaf0" opacity="0.22"/>`
+    : isNoodle
+      ? `<ellipse cx="320" cy="244" rx="218" ry="116" fill="${plate}"/><path d="M175 245c80-72 210 72 290 0M188 275c84-58 198 58 264 0M210 210c66-48 150 48 220 0" fill="none" stroke="${main}" stroke-width="24" stroke-linecap="round"/><ellipse cx="320" cy="244" rx="182" ry="88" fill="none" stroke="#fff8e8" stroke-width="18" opacity="0.6"/>`
+      : isDessert
+        ? `<rect x="190" y="154" width="260" height="150" rx="34" fill="${plate}"/><rect x="218" y="174" width="204" height="104" rx="28" fill="${main}"/><path d="M225 188h190" stroke="#fff9ed" stroke-width="14" stroke-linecap="round" opacity="0.68"/>`
+        : `<ellipse cx="320" cy="240" rx="220" ry="118" fill="${plate}"/><ellipse cx="320" cy="240" rx="168" ry="84" fill="${main}"/><path d="M214 277c78 44 178 44 252 0" fill="none" stroke="#202321" stroke-opacity="0.15" stroke-width="18" stroke-linecap="round"/>`;
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420">
       <defs>
@@ -700,15 +797,18 @@ function buildRecipeImage(recipe) {
         </linearGradient>
       </defs>
       <rect width="640" height="420" fill="url(#bg)"/>
-      <ellipse cx="320" cy="240" rx="220" ry="118" fill="${plate}"/>
-      <ellipse cx="320" cy="240" rx="168" ry="84" fill="${main}"/>
-      <circle cx="250" cy="212" r="34" fill="#fff4dc" opacity="0.9"/>
-      <circle cx="366" cy="246" r="42" fill="${garnish}" opacity="0.9"/>
-      <circle cx="423" cy="206" r="24" fill="#fff8e8" opacity="0.85"/>
-      <path d="M214 277c78 44 178 44 252 0" fill="none" stroke="#202321" stroke-opacity="0.15" stroke-width="18" stroke-linecap="round"/>
-      <text x="320" y="365" text-anchor="middle" font-size="36" font-weight="700" fill="#202321" font-family="PingFang SC, Microsoft YaHei, sans-serif">${title}</text>
+      <circle cx="92" cy="86" r="42" fill="#ffffff" opacity="0.34"/>
+      <circle cx="544" cy="104" r="58" fill="#ffffff" opacity="0.26"/>
+      ${vessel}
+      ${pieces}
+      <path d="M476 112c34 30 42 82 16 120" fill="none" stroke="${dark}" stroke-width="9" stroke-linecap="round" opacity="0.16"/>
+      <text x="320" y="365" text-anchor="middle" font-size="36" font-weight="700" fill="${dark}" font-family="PingFang SC, Microsoft YaHei, sans-serif">${title}</text>
     </svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+function hashText(value) {
+  return [...String(value)].reduce((hash, char) => (hash * 31 + char.charCodeAt(0)) % 9973, 17);
 }
 
 function escapeSvgText(value) {
