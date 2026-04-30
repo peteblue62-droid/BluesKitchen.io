@@ -17,6 +17,7 @@
           <p class="eyebrow">厨房助手</p>
           <h1>一餐一谱</h1>
         </div>
+        <button class="mode-button" id="largeTextMode" type="button" aria-pressed="false">大字</button>
         <button class="install-button hidden" id="installApp" type="button">安装</button>
         <button class="icon-text-button" id="openAddRecipe" type="button">
           <span aria-hidden="true">＋</span>
@@ -57,6 +58,7 @@
           <button class="filter-pill" data-filter="quick" type="button">快手</button>
           <button class="filter-pill" data-filter="protein" type="button">高蛋白</button>
           <button class="filter-pill" data-filter="vegetable" type="button">多蔬菜</button>
+          <button class="filter-pill" data-filter="dessert" type="button">甜品</button>
           <button class="filter-pill" data-filter="favorite" type="button">收藏</button>
         </div>
       </section>
@@ -97,6 +99,7 @@
           <button class="favorite-button" id="dialogFavorite" type="button" aria-label="收藏">♡</button>
         </div>
         <p id="dialogDescription"></p>
+        <p class="cook-tip" id="dialogTip"></p>
         <div class="dialog-photo hidden" id="dialogPhoto" aria-hidden="true"></div>
         <div class="serving-toolbar" aria-label="份量和图片">
           <div>
@@ -164,6 +167,10 @@
           <label>
             <input name="category" type="checkbox" value="vegetable" />
             多蔬菜
+          </label>
+          <label>
+            <input name="category" type="checkbox" value="dessert" />
+            甜品
           </label>
         </fieldset>
         <label>

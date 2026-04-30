@@ -27,6 +27,39 @@ body {
     Inter, "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
 }
 
+body.large-text {
+  font-size: 19px;
+}
+
+body.large-text h1 {
+  font-size: clamp(36px, 6vw, 56px);
+}
+
+body.large-text h2 {
+  font-size: 31px;
+}
+
+body.large-text h3,
+body.large-text .recipe-card h3 {
+  font-size: 24px;
+}
+
+body.large-text p,
+body.large-text li,
+body.large-text input,
+body.large-text textarea,
+body.large-text select,
+body.large-text button {
+  font-size: 19px;
+}
+
+body.large-text .recipe-card,
+body.large-text .dialog-body,
+body.large-text .pantry-panel,
+body.large-text .recipe-section {
+  line-height: 1.8;
+}
+
 button,
 input,
 textarea,
@@ -49,6 +82,7 @@ button {
 .panel-heading,
 .dialog-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
@@ -79,6 +113,7 @@ h2 {
 }
 
 .icon-text-button,
+.mode-button,
 .install-button,
 .primary-button,
 .ghost-button,
@@ -99,6 +134,21 @@ h2 {
   font-weight: 800;
 }
 
+.mode-button {
+  min-height: 44px;
+  margin-left: auto;
+  padding: 0 14px;
+  border: 1px solid var(--green);
+  background: white;
+  color: var(--green);
+  font-weight: 800;
+}
+
+.mode-button.active {
+  background: var(--green);
+  color: white;
+}
+
 .icon-text-button {
   display: inline-flex;
   align-items: center;
@@ -108,7 +158,6 @@ h2 {
 
 .install-button {
   min-height: 44px;
-  margin-left: auto;
   padding: 0 16px;
 }
 
@@ -546,6 +595,16 @@ select:focus {
   border-radius: 8px;
   background-position: center;
   background-size: cover;
+}
+
+.cook-tip {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  background: #fff8df;
+  color: var(--ink);
+  line-height: 1.65;
 }
 
 .serving-toolbar {

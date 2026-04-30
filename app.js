@@ -273,6 +273,7 @@ const extraRecipes = [
 }));
 
 const generatedRecipes = buildGeneratedRecipes();
+const dessertRecipes = buildDessertRecipes();
 
 function buildGeneratedRecipes() {
   const mains = [
@@ -358,6 +359,56 @@ function buildDetailedSteps(title, ingredients, main, side, flavor, isQuick) {
   ];
 }
 
+function buildDessertRecipes() {
+  const desserts = [
+    ["classic-egg-tart", "葡式蛋挞", "外皮酥，蛋奶馅嫩滑，适合下午茶。", "45 分钟", "中等", ["蛋挞皮", "鸡蛋", "牛奶", "淡奶油", "细砂糖"], "#f8e1b8", "#d99a36"],
+    ["mango-pudding", "芒果布丁", "芒果香气足，口感顺滑冰凉。", "20 分钟", "简单", ["芒果", "牛奶", "淡奶油", "吉利丁片", "细砂糖"], "#f6dfa4", "#e0a12c"],
+    ["red-bean-soup", "红豆沙", "绵密温润，冷热都可以吃。", "60 分钟", "简单", ["红豆", "冰糖", "陈皮", "清水"], "#ead4dc", "#954f63"],
+    ["black-sesame-soup", "黑芝麻糊", "浓香顺滑，早餐和夜宵都合适。", "25 分钟", "简单", ["黑芝麻", "糯米粉", "细砂糖", "牛奶"], "#e7e2df", "#4d4852"],
+    ["taro-sago", "芋泥西米露", "芋泥绵密，西米弹润，奶香明显。", "45 分钟", "中等", ["芋头", "西米", "椰奶", "牛奶", "细砂糖"], "#ead8ef", "#8f6aa3"],
+    ["coconut-milk-jelly", "椰奶冻", "清甜奶香，入口轻盈。", "15 分钟", "简单", ["椰奶", "牛奶", "吉利丁片", "细砂糖"], "#f4eee1", "#d5bd8c"],
+    ["matcha-mousse", "抹茶慕斯", "茶香微苦，甜度轻盈。", "40 分钟", "中等", ["抹茶粉", "淡奶油", "牛奶", "吉利丁片", "细砂糖"], "#dfeecf", "#6f9f4b"],
+    ["strawberry-shortcake", "草莓奶油蛋糕", "草莓清甜，奶油柔软。", "70 分钟", "进阶", ["低筋面粉", "鸡蛋", "草莓", "淡奶油", "细砂糖"], "#f2d8df", "#c95d75"],
+    ["banana-pancake", "香蕉松饼", "松软香甜，适合早餐。", "25 分钟", "简单", ["香蕉", "低筋面粉", "鸡蛋", "牛奶", "泡打粉"], "#f2e2b8", "#d4a63a"],
+    ["brownie", "巧克力布朗尼", "外层微脆，内部浓郁湿润。", "40 分钟", "中等", ["黑巧克力", "黄油", "鸡蛋", "低筋面粉", "细砂糖"], "#ead6ca", "#6d3f35"],
+    ["cheese-cake", "轻乳酪蛋糕", "口感轻盈，奶香细腻。", "80 分钟", "进阶", ["奶油奶酪", "鸡蛋", "牛奶", "低筋面粉", "细砂糖"], "#f2e6c9", "#d4b56a"],
+    ["snowflake-crisp", "雪花酥", "奶香酥脆，坚果和饼干很有层次。", "25 分钟", "简单", ["棉花糖", "黄油", "奶粉", "饼干", "坚果"], "#f4eee1", "#c9a15b"],
+    ["peanut-mochi", "花生糯米糍", "软糯香甜，花生碎很香。", "35 分钟", "中等", ["糯米粉", "牛奶", "细砂糖", "花生", "黄油"], "#efe0c8", "#b9824a"],
+    ["milk-tea-jelly", "奶茶冻", "茶香和奶香融合，冰过更好吃。", "25 分钟", "简单", ["红茶", "牛奶", "吉利丁片", "细砂糖"], "#ead8c2", "#9b6a45"],
+    ["apple-crumble", "苹果酥粒", "苹果酸甜，表面酥香。", "45 分钟", "中等", ["苹果", "低筋面粉", "黄油", "燕麦", "细砂糖"], "#f0dfbd", "#c17f38"],
+    ["purple-rice-yogurt", "紫米酸奶杯", "酸奶清爽，紫米软糯。", "20 分钟", "简单", ["紫米", "酸奶", "蜂蜜", "芒果"], "#e5d7ee", "#76549a"],
+    ["osmanthus-rice-ball", "桂花酒酿圆子", "桂花香甜，圆子软糯。", "20 分钟", "简单", ["小圆子", "酒酿", "桂花蜜", "冰糖"], "#f4e8c5", "#c9a64b"],
+    ["double-skin-milk", "双皮奶", "奶香浓，口感嫩滑。", "35 分钟", "中等", ["牛奶", "蛋清", "细砂糖", "红豆"], "#f4eee1", "#d5bd8c"],
+    ["lemon-tart", "柠檬挞", "酸甜明亮，挞皮酥香。", "55 分钟", "进阶", ["挞皮", "柠檬", "鸡蛋", "黄油", "细砂糖"], "#f6e8b8", "#dfbf3d"],
+    ["pear-snow-fungus", "冰糖雪梨银耳羹", "清润微甜，适合温热喝。", "70 分钟", "简单", ["雪梨", "银耳", "冰糖", "枸杞"], "#f2ead9", "#d7b86a"]
+  ];
+
+  return desserts.map(([id, title, description, time, difficulty, ingredients, bg, main]) => ({
+    id,
+    title,
+    description,
+    time,
+    difficulty,
+    category: ["dessert"],
+    ingredients,
+    steps: buildDessertSteps(title, ingredients),
+    tip: "甜品对火候和冷藏时间更敏感，第一次做建议按用量来，甜度可以最后微调。",
+    colors: [bg, main]
+  }));
+}
+
+function buildDessertSteps(title, ingredients) {
+  const main = ingredients[0] || title;
+  return [
+    `称量：按用料表提前称好${ingredients.slice(0, 4).join("、")}，甜品尽量不要凭感觉加料。`,
+    `预处理：${main}洗净、切块或泡发；需要融化的黄油、巧克力、吉利丁提前隔水处理。`,
+    "混合：先把液体材料搅匀，再加入粉类或凝固材料，搅到顺滑无明显颗粒。",
+    "加热或烘烤：小火加热时不断搅拌；进烤箱时先预热，观察表面上色。",
+    "定型：需要冷藏的甜品至少冷藏 2 小时，需要回温的甜品放凉后再切。",
+    "装盘：表面可以加水果、坚果、桂花或糖粉，吃前再点缀口感最好。"
+  ];
+}
+
 const state = {
   recipes: loadRecipes(),
   pantry: JSON.parse(localStorage.getItem("pantry") || "[]"),
@@ -375,10 +426,12 @@ const pantryForm = document.querySelector("#pantryForm");
 const pantryInput = document.querySelector("#pantryInput");
 const pantryTags = document.querySelector("#pantryTags");
 const clearPantry = document.querySelector("#clearPantry");
+const largeTextMode = document.querySelector("#largeTextMode");
 const recipeDialog = document.querySelector("#recipeDialog");
 const closeDialog = document.querySelector("#closeDialog");
 const dialogFavorite = document.querySelector("#dialogFavorite");
 const dialogPhoto = document.querySelector("#dialogPhoto");
+const dialogTip = document.querySelector("#dialogTip");
 const imageSearch = document.querySelector("#imageSearch");
 const addDialog = document.querySelector("#addDialog");
 const addRecipeForm = document.querySelector("#addRecipeForm");
@@ -423,7 +476,43 @@ const ingredientAmounts = {
   排骨: "400克",
   莲藕: "300克",
   菠菜: "250克",
-  食用油: "1汤匙"
+  食用油: "1汤匙",
+  低筋面粉: "120克",
+  糯米粉: "120克",
+  牛奶: "200毫升",
+  淡奶油: "150毫升",
+  细砂糖: "35克",
+  冰糖: "30克",
+  黄油: "35克",
+  吉利丁片: "8克",
+  芒果: "1个",
+  香蕉: "1根",
+  草莓: "180克",
+  苹果: "1个",
+  雪梨: "1个",
+  红豆: "120克",
+  黑芝麻: "60克",
+  西米: "60克",
+  椰奶: "200毫升",
+  奶油奶酪: "180克",
+  黑巧克力: "120克",
+  蛋挞皮: "6个",
+  泡打粉: "4克",
+  棉花糖: "150克",
+  奶粉: "45克",
+  饼干: "120克",
+  坚果: "60克",
+  红茶: "5克",
+  酸奶: "200克",
+  紫米: "80克",
+  小圆子: "160克",
+  酒酿: "120克",
+  桂花蜜: "1汤匙",
+  银耳: "半朵",
+  枸杞: "一小把",
+  抹茶粉: "6克",
+  椰奶: "200毫升",
+  蛋清: "2个"
 };
 
 const photoOverrides = {
@@ -438,7 +527,7 @@ const photoOverrides = {
 
 function loadRecipes() {
   const saved = JSON.parse(localStorage.getItem("customRecipes") || "[]");
-  return [...starterRecipes, ...extraRecipes, ...generatedRecipes, ...saved].map(normalizeRecipe);
+  return [...starterRecipes, ...extraRecipes, ...generatedRecipes, ...dessertRecipes, ...saved].map(normalizeRecipe);
 }
 
 function saveCustomRecipe(recipe) {
@@ -534,6 +623,7 @@ function openRecipe(id) {
   document.querySelector("#dialogMeta").textContent = `${recipe.time} · ${recipe.difficulty}`;
   document.querySelector("#dialogTitle").textContent = recipe.title;
   document.querySelector("#dialogDescription").textContent = recipe.description;
+  dialogTip.textContent = recipe.tip || getRecipeTip(recipe);
   renderServings(recipe);
   document.querySelector("#stepList").innerHTML = recipe.steps.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   dialogFavorite.textContent = state.favorites.includes(id) ? "♥" : "♡";
@@ -560,6 +650,12 @@ function getIngredientAmount(name, servings) {
 }
 
 function inferIngredientAmount(name) {
+  if (/(面粉|糯米粉|奶粉|燕麦|西米|紫米|红豆|黑芝麻|饼干|坚果|花生)/.test(name)) return "80克";
+  if (/(牛奶|椰奶|淡奶油|酸奶)/.test(name)) return "200毫升";
+  if (/(细砂糖|冰糖|黄油|黑巧克力|奶油奶酪|棉花糖)/.test(name)) return "50克";
+  if (/(吉利丁片|泡打粉|抹茶粉|红茶)/.test(name)) return "6克";
+  if (/(芒果|香蕉|苹果|雪梨|柠檬)/.test(name)) return "1个";
+  if (/(草莓|蓝莓)/.test(name)) return "150克";
   if (/(油|醋|酱|料酒|辣椒油|香油|鱼露|味淋|淡奶油|芝麻酱|番茄酱|咖喱块)/.test(name)) return "1汤匙";
   if (/(糖|冰糖|花椒粉|孜然粉|辣椒粉|白胡椒|黑胡椒|椒盐|盐)/.test(name)) return "少许";
   if (/(葱|香菜|薄荷|罗勒|九层塔)/.test(name)) return "2根";
@@ -583,9 +679,17 @@ function getRecipePhoto(recipe) {
   return photoOverrides[recipe.id] || buildRecipeImage(recipe);
 }
 
+function getRecipeTip(recipe) {
+  if (recipe.category.includes("dessert")) return "甜品先按配方做，熟练后再减糖；冷藏类甜品要给足定型时间。";
+  if (recipe.category.includes("quick")) return "快手菜讲究火力和顺序，先把食材切好再开火会更稳。";
+  if (recipe.difficulty === "进阶") return "这道菜步骤较多，建议先读完整做法，再开始备料。";
+  return "第一次做可以少放盐，最后尝味后再补，成品更容易掌控。";
+}
+
 function buildRecipeImage(recipe) {
   const [bg, main] = recipe.colors || ["#f6ead8", "#d99b45"];
-  const garnish = recipe.category.includes("protein") ? "#c94838" : "#4f9a62";
+  const garnish = recipe.category.includes("dessert") ? "#f2a0b7" : recipe.category.includes("protein") ? "#c94838" : "#4f9a62";
+  const plate = recipe.category.includes("dessert") ? "#fff7fb" : "#fffdf7";
   const title = escapeSvgText(recipe.title.slice(0, 10));
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420">
@@ -596,7 +700,7 @@ function buildRecipeImage(recipe) {
         </linearGradient>
       </defs>
       <rect width="640" height="420" fill="url(#bg)"/>
-      <ellipse cx="320" cy="240" rx="220" ry="118" fill="#fffdf7"/>
+      <ellipse cx="320" cy="240" rx="220" ry="118" fill="${plate}"/>
       <ellipse cx="320" cy="240" rx="168" ry="84" fill="${main}"/>
       <circle cx="250" cy="212" r="34" fill="#fff4dc" opacity="0.9"/>
       <circle cx="366" cy="246" r="42" fill="${garnish}" opacity="0.9"/>
@@ -645,6 +749,20 @@ document.querySelectorAll(".filter-pill").forEach((button) => {
     state.filter = button.dataset.filter;
     renderRecipes();
   });
+});
+
+function applyLargeTextMode(enabled) {
+  document.body.classList.toggle("large-text", enabled);
+  largeTextMode.classList.toggle("active", enabled);
+  largeTextMode.setAttribute("aria-pressed", String(enabled));
+  largeTextMode.textContent = enabled ? "普通字" : "大字";
+  localStorage.setItem("largeTextMode", enabled ? "on" : "off");
+}
+
+applyLargeTextMode(localStorage.getItem("largeTextMode") === "on");
+
+largeTextMode.addEventListener("click", () => {
+  applyLargeTextMode(!document.body.classList.contains("large-text"));
 });
 
 searchInput.addEventListener("input", (event) => {
@@ -731,7 +849,7 @@ addRecipeForm.addEventListener("submit", (event) => {
     category: formData.getAll("category").length ? formData.getAll("category") : ["quick"],
     ingredients,
     steps,
-    colors: ["#e8f0ec", "#2f6c4f"]
+    colors: formData.getAll("category").includes("dessert") ? ["#f2d8df", "#c95d75"] : ["#e8f0ec", "#2f6c4f"]
   };
   state.recipes = [...state.recipes, recipe];
   saveCustomRecipe(recipe);
