@@ -274,6 +274,7 @@ const extraRecipes = [
 
 const generatedRecipes = buildGeneratedRecipes();
 const dessertRecipes = buildDessertRecipes();
+const worldRecipes = buildWorldRecipes();
 
 function buildGeneratedRecipes() {
   const mains = [
@@ -417,6 +418,66 @@ function buildDessertSteps(title, ingredients) {
   ];
 }
 
+function buildWorldRecipes() {
+  const mains = [
+    ["鸡腿肉", "protein", "嫩滑多汁"], ["鸡胸肉", "protein", "清爽低脂"], ["鸡翅", "protein", "外皮香脆"], ["牛肉", "protein", "肉香浓郁"],
+    ["牛腩", "protein", "适合慢炖"], ["猪里脊", "protein", "细嫩好熟"], ["五花肉", "protein", "油脂丰润"], ["排骨", "protein", "骨香明显"],
+    ["虾仁", "protein", "鲜甜弹嫩"], ["鲜虾", "protein", "海味清甜"], ["鱼片", "protein", "入口滑嫩"], ["鲈鱼", "protein", "肉质细腻"],
+    ["三文鱼", "protein", "油脂丰厚"], ["鳕鱼", "protein", "味道清淡"], ["豆腐", "protein", "吸汁柔嫩"], ["鸡蛋", "protein", "快手百搭"],
+    ["羊肉", "protein", "香味直接"], ["鸭肉", "protein", "肉味浓厚"], ["蛤蜊", "protein", "自带鲜味"], ["鱿鱼", "protein", "爽脆弹牙"],
+    ["香菇", "vegetable", "菌香充足"], ["杏鲍菇", "vegetable", "口感厚实"], ["口蘑", "vegetable", "鲜味温和"], ["莲藕", "vegetable", "清脆微甜"],
+    ["土豆", "vegetable", "绵软管饱"], ["茄子", "vegetable", "软糯吸汁"], ["西葫芦", "vegetable", "清爽易熟"], ["花菜", "vegetable", "脆嫩耐炒"],
+    ["西兰花", "vegetable", "清香脆嫩"], ["南瓜", "vegetable", "软糯香甜"], ["玉米", "vegetable", "甜味明显"], ["芋头", "vegetable", "粉糯厚实"],
+    ["米饭", "staple", "饱腹踏实"], ["面条", "staple", "顺滑入味"]
+  ];
+  const styles = [
+    ["川味", "青椒", ["豆瓣酱", "花椒粉", "蒜"], ["quick"], ["#f1d0c7", "#bf4b36"], "麻辣鲜香"],
+    ["粤式", "香菇", ["蚝油", "生抽", "姜"], ["quick"], ["#eadfce", "#8d6b4d"], "咸鲜温和"],
+    ["江南", "笋片", ["生抽", "糖", "葱"], ["vegetable"], ["#f0e4c8", "#b08f38"], "清甜柔和"],
+    ["湘味", "小米椒", ["蒜", "生抽", "辣椒粉"], ["quick"], ["#f3d0c4", "#b83f35"], "香辣下饭"],
+    ["东北", "土豆", ["生抽", "姜", "葱"], ["vegetable"], ["#f0dfc4", "#bd7c38"], "浓郁管饱"],
+    ["西北孜然", "洋葱", ["孜然粉", "辣椒粉", "香菜"], ["quick"], ["#ead8c5", "#9a5e38"], "干香有嚼劲"],
+    ["云南菌香", "口蘑", ["蒜", "盐", "白胡椒"], ["vegetable"], ["#eadfce", "#7c684d"], "菌香清润"],
+    ["泰式酸辣", "番茄", ["柠檬", "鱼露", "小米椒"], ["quick"], ["#f7d7c9", "#d34e3c"], "酸辣开胃"],
+    ["韩式", "泡菜", ["韩式辣酱", "芝麻油", "葱"], ["quick"], ["#f4d6ca", "#c94d3a"], "甜辣浓郁"],
+    ["日式照烧", "洋葱", ["酱油", "蜂蜜", "味淋"], ["quick"], ["#ead5c5", "#985438"], "甜咸发亮"],
+    ["意式番茄", "番茄", ["番茄酱", "黑胡椒", "橄榄油"], ["quick"], ["#f1d4c8", "#ba4c38"], "番茄香浓"],
+    ["法式奶香", "蘑菇", ["淡奶油", "黄油", "黑胡椒"], ["vegetable"], ["#efe4d2", "#9b8a69"], "奶香柔和"],
+    ["印度咖喱", "土豆", ["咖喱块", "洋葱", "椰奶"], ["vegetable"], ["#f0d9ad", "#b97c2f"], "辛香浓稠"],
+    ["地中海", "彩椒", ["橄榄油", "柠檬", "黑胡椒"], ["quick", "vegetable"], ["#f4e0b5", "#5f8fa0"], "清爽明亮"],
+    ["墨西哥", "玉米", ["番茄酱", "辣椒粉", "洋葱"], ["quick", "staple"], ["#f2d6b3", "#c56a39"], "香辣有层次"],
+    ["砂锅", "白菜", ["姜", "白胡椒", "盐"], ["soup", "vegetable"], ["#e9f0df", "#7ba35c"], "热乎入味"],
+    ["清炖", "白萝卜", ["姜", "葱", "盐"], ["soup", "vegetable"], ["#eef0e5", "#8b7763"], "汤清味鲜"],
+    ["焖饭", "胡萝卜", ["生抽", "香菇", "葱"], ["staple", "vegetable"], ["#f6e6c4", "#d9a841"], "一锅完成"],
+    ["凉拌", "黄瓜", ["醋", "生抽", "蒜"], ["quick", "vegetable"], ["#dff0dc", "#4f9d55"], "爽口开胃"],
+    ["早餐", "鸡蛋", ["牛奶", "黑胡椒", "盐"], ["quick", "staple"], ["#f4e5c4", "#d6a33d"], "简单舒服"]
+  ];
+
+  return mains.flatMap(([main, mainCategory, mainNote], mainIndex) =>
+    styles.map(([style, side, seasonings, styleCategories, colors, flavorNote], styleIndex) => {
+      const id = `world-${mainIndex + 1}-${styleIndex + 1}`;
+      const category = Array.from(new Set([mainCategory, ...styleCategories, ...(mainCategory === "protein" ? ["protein"] : [])]));
+      const ingredients = Array.from(new Set([main, side, ...seasonings, "盐", "食用油"]));
+      const isQuick = category.includes("quick") && !category.includes("soup");
+      const time = category.includes("soup") ? `${45 + ((mainIndex + styleIndex) % 4) * 10} 分钟` : category.includes("staple") ? `${25 + ((mainIndex + styleIndex) % 4) * 8} 分钟` : `${16 + ((mainIndex + styleIndex) % 5) * 5} 分钟`;
+      const difficulty = category.includes("soup") || ["牛腩", "排骨", "鸭肉"].includes(main) ? "中等" : "简单";
+      const title = `${style}${main}${side}`;
+      return {
+        id,
+        title,
+        description: `${style}做法的${main}配${side}，${mainNote}，整体${flavorNote}，适合想换口味时做。`,
+        time,
+        difficulty,
+        category,
+        ingredients,
+        steps: buildDetailedSteps(title, ingredients, main, side, style, isQuick),
+        tip: `${style}风味重点在调味顺序：先炒香基础调料，再让${main}和${side}吸收味道。`,
+        colors
+      };
+    })
+  );
+}
+
 const state = {
   recipes: loadRecipes(),
   pantry: JSON.parse(localStorage.getItem("pantry") || "[]"),
@@ -537,7 +598,7 @@ const photoOverrides = {
 
 function loadRecipes() {
   const saved = JSON.parse(localStorage.getItem("customRecipes") || "[]");
-  return [...starterRecipes, ...extraRecipes, ...generatedRecipes, ...dessertRecipes, ...saved].map(normalizeRecipe);
+  return [...starterRecipes, ...extraRecipes, ...generatedRecipes, ...dessertRecipes, ...worldRecipes, ...saved].map(normalizeRecipe);
 }
 
 function saveCustomRecipe(recipe) {
@@ -591,6 +652,8 @@ function renderRecipes() {
       <p>${escapeHtml(recipe.description)}</p>
       <div class="card-meta">
         <span>${escapeHtml(getCategoryLabel(recipe))}</span>
+        <span>有图</span>
+        <span>${recipe.steps.length}步教程</span>
         <span>${escapeHtml(recipe.time)}</span>
         <span>${escapeHtml(recipe.difficulty)}</span>
         <span>${escapeHtml(getReadinessLabel(recipe))}</span>
@@ -607,6 +670,8 @@ function renderRecipes() {
 
 function getCategoryLabel(recipe) {
   if (recipe.category.includes("dessert")) return "甜品";
+  if (recipe.category.includes("soup")) return "汤粥";
+  if (recipe.category.includes("staple")) return "主食";
   if (recipe.category.includes("protein") && recipe.category.includes("vegetable")) return "荤素搭配";
   if (recipe.category.includes("protein")) return "高蛋白";
   if (recipe.category.includes("vegetable")) return "多蔬菜";
@@ -855,7 +920,7 @@ function applyLargeTextMode(enabled) {
   document.body.classList.toggle("large-text", enabled);
   largeTextMode.classList.toggle("active", enabled);
   largeTextMode.setAttribute("aria-pressed", String(enabled));
-  largeTextMode.textContent = enabled ? "普通字" : "大字";
+  largeTextMode.textContent = enabled ? "切回普通字" : "长者大字模式";
   localStorage.setItem("largeTextMode", enabled ? "on" : "off");
 }
 
