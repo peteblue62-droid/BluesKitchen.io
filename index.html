@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#2f6c4f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="一餐一谱" />
+    <title>一餐一谱</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="topbar" aria-label="应用顶部">
+        <div>
+          <p class="eyebrow">厨房助手</p>
+          <h1>一餐一谱</h1>
+        </div>
+        <button class="install-button hidden" id="installApp" type="button">安装</button>
+        <button class="icon-text-button" id="openAddRecipe" type="button">
+          <span aria-hidden="true">＋</span>
+          新菜谱
+        </button>
+      </section>
+
+      <section class="hero" aria-label="今日推荐">
+        <div class="hero-copy">
+          <p class="eyebrow">今日灵感</p>
+          <h2 id="featuredTitle">番茄牛腩饭</h2>
+          <p id="featuredSummary">浓郁番茄汁包住软糯牛腩，适合提前炖一锅，第二天也好吃。</p>
+          <div class="hero-actions">
+            <button class="primary-button" id="viewFeatured" type="button">查看做法</button>
+            <button class="ghost-button" id="randomRecipe" type="button">换一道</button>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="plate">
+            <div class="rice"></div>
+            <div class="sauce"></div>
+            <div class="leaf leaf-one"></div>
+            <div class="leaf leaf-two"></div>
+          </div>
+          <div class="steam steam-one"></div>
+          <div class="steam steam-two"></div>
+          <div class="steam steam-three"></div>
+        </div>
+      </section>
+
+      <section class="controls" aria-label="筛选食谱">
+        <label class="search-box">
+          <span>搜索</span>
+          <input id="searchInput" type="search" placeholder="输入菜名、食材或口味" />
+        </label>
+        <div class="filter-row" aria-label="分类筛选">
+          <button class="filter-pill active" data-filter="all" type="button">全部</button>
+          <button class="filter-pill" data-filter="quick" type="button">快手</button>
+          <button class="filter-pill" data-filter="protein" type="button">高蛋白</button>
+          <button class="filter-pill" data-filter="vegetable" type="button">多蔬菜</button>
+          <button class="filter-pill" data-filter="favorite" type="button">收藏</button>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <aside class="pantry-panel" aria-label="冰箱食材">
+          <div class="panel-heading">
+            <h2>冰箱里有</h2>
+            <button class="text-button" id="clearPantry" type="button">清空</button>
+          </div>
+          <form class="pantry-form" id="pantryForm">
+            <input id="pantryInput" type="text" placeholder="例如：鸡蛋" />
+            <button class="square-button" type="submit" aria-label="添加食材">＋</button>
+          </form>
+          <div class="tag-list" id="pantryTags"></div>
+          <p class="panel-note">添加食材后，列表会优先显示更匹配的菜谱。</p>
+        </aside>
+
+        <section class="recipe-section" aria-label="食谱列表">
+          <div class="section-heading">
+            <h2>食谱</h2>
+            <span id="recipeCount">0 道</span>
+          </div>
+          <div class="recipe-list" id="recipeList"></div>
+          <p class="empty-state hidden" id="emptyState">没有找到合适的菜谱，换个关键词试试。</p>
+        </section>
+      </section>
+    </main>
+
+    <dialog class="recipe-dialog" id="recipeDialog">
+      <article class="dialog-body">
+        <button class="close-button" id="closeDialog" type="button" aria-label="关闭">×</button>
+        <div class="dialog-header">
+          <div>
+            <p class="eyebrow" id="dialogMeta">30 分钟 · 中等</p>
+            <h2 id="dialogTitle">菜名</h2>
+          </div>
+          <button class="favorite-button" id="dialogFavorite" type="button" aria-label="收藏">♡</button>
+        </div>
+        <p id="dialogDescription"></p>
+        <div class="dialog-photo hidden" id="dialogPhoto" aria-hidden="true"></div>
+        <div class="serving-toolbar" aria-label="份量和图片">
+          <div>
+            <span>份量</span>
+            <button class="serving-button" data-serving="1" type="button">1人</button>
+            <button class="serving-button active" data-serving="2" type="button">2人</button>
+            <button class="serving-button" data-serving="4" type="button">4人</button>
+          </div>
+          <a class="image-link" id="imageSearch" target="_blank" rel="noreferrer">找菜品图片</a>
+        </div>
+        <div class="detail-grid">
+          <section>
+            <h3 id="ingredientTitle">用料（2人份）</h3>
+            <ul id="ingredientList"></ul>
+          </section>
+          <section>
+            <h3>步骤</h3>
+            <ol id="stepList"></ol>
+          </section>
+        </div>
+      </article>
+    </dialog>
+
+    <dialog class="recipe-dialog" id="addDialog">
+      <form class="dialog-body add-form" id="addRecipeForm" method="dialog">
+        <button class="close-button" id="closeAddDialog" type="button" aria-label="关闭">×</button>
+        <div class="dialog-header">
+          <div>
+            <p class="eyebrow">记录你的拿手菜</p>
+            <h2>新菜谱</h2>
+          </div>
+        </div>
+        <label>
+          菜名
+          <input name="title" required placeholder="例如：葱油拌面" />
+        </label>
+        <label>
+          简介
+          <textarea name="description" required placeholder="一句话描述这道菜"></textarea>
+        </label>
+        <div class="form-two">
+          <label>
+            时间
+            <input name="time" required placeholder="20 分钟" />
+          </label>
+          <label>
+            难度
+            <select name="difficulty">
+              <option>简单</option>
+              <option>中等</option>
+              <option>进阶</option>
+            </select>
+          </label>
+        </div>
+        <fieldset class="category-field">
+          <legend>分类</legend>
+          <label>
+            <input name="category" type="checkbox" value="quick" checked />
+            快手
+          </label>
+          <label>
+            <input name="category" type="checkbox" value="protein" />
+            高蛋白
+          </label>
+          <label>
+            <input name="category" type="checkbox" value="vegetable" />
+            多蔬菜
+          </label>
+        </fieldset>
+        <label>
+          用料
+          <textarea name="ingredients" required placeholder="用逗号分隔，例如：面条，葱，生抽"></textarea>
+        </label>
+        <label>
+          步骤
+          <textarea name="steps" required placeholder="每行写一步"></textarea>
+        </label>
+        <button class="primary-button" type="submit">保存菜谱</button>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
