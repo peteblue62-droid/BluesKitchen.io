@@ -644,19 +644,21 @@ function renderRecipes() {
     const photo = getRecipePhoto(recipe);
     card.className = "recipe-card";
     card.innerHTML = `
-      <div class="recipe-art ${photo ? "has-photo" : ""}" style="--art-bg: ${recipe.colors[0]}; --art-main: ${recipe.colors[1]}; ${photo ? `background-image: url('${photo}')` : ""}"></div>
-      <div class="card-topline">
-        <h3>${escapeHtml(recipe.title)}</h3>
+      <div class="recipe-art ${photo ? "has-photo" : ""}" style="--art-bg: ${recipe.colors[0]}; --art-main: ${recipe.colors[1]}; ${photo ? `background-image: url('${photo}')` : ""}">
         <button class="mini-fav" type="button" aria-label="收藏 ${escapeHtml(recipe.title)}">${state.favorites.includes(recipe.id) ? "♥" : "♡"}</button>
+        <span class="image-badge">${escapeHtml(getCategoryLabel(recipe))}</span>
       </div>
-      <p>${escapeHtml(recipe.description)}</p>
-      <div class="card-meta">
-        <span>${escapeHtml(getCategoryLabel(recipe))}</span>
-        <span>有图</span>
-        <span>${recipe.steps.length}步教程</span>
-        <span>${escapeHtml(recipe.time)}</span>
-        <span>${escapeHtml(recipe.difficulty)}</span>
-        <span>${escapeHtml(getReadinessLabel(recipe))}</span>
+      <div class="recipe-card-body">
+        <div class="card-topline">
+          <h3>${escapeHtml(recipe.title)}</h3>
+        </div>
+        <p>${escapeHtml(recipe.description)}</p>
+        <div class="card-meta">
+          <span>${recipe.steps.length}步</span>
+          <span>${escapeHtml(recipe.time)}</span>
+          <span>${escapeHtml(recipe.difficulty)}</span>
+          <span>${escapeHtml(getReadinessLabel(recipe))}</span>
+        </div>
       </div>
     `;
     card.addEventListener("click", () => openRecipe(recipe.id));

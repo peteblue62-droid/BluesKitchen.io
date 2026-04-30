@@ -30,6 +30,8 @@ body {
   color: var(--ink);
   font-family:
     Inter, "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
 }
 
 body.large-text {
@@ -65,6 +67,16 @@ body.large-text .recipe-section {
   line-height: 1.8;
 }
 
+body.large-text .recipe-list {
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+}
+
+body.large-text .filter-pill,
+body.large-text .serving-button,
+body.large-text .image-link {
+  min-height: 48px;
+}
+
 button,
 input,
 textarea,
@@ -74,6 +86,7 @@ select {
 
 button {
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .app-shell {
@@ -155,9 +168,10 @@ h2 {
 .icon-text-button,
 .install-button,
 .primary-button {
-  background: var(--green);
+  background: linear-gradient(135deg, var(--green), #245640);
   color: white;
   font-weight: 800;
+  box-shadow: 0 10px 24px rgba(47, 108, 79, 0.2);
 }
 
 .mode-button {
@@ -167,10 +181,11 @@ h2 {
   background: white;
   color: var(--green);
   font-weight: 800;
+  box-shadow: 0 8px 20px rgba(47, 108, 79, 0.08);
 }
 
 .mode-button.active {
-  background: var(--green);
+  background: linear-gradient(135deg, var(--green), #245640);
   color: white;
 }
 
@@ -193,9 +208,10 @@ h2 {
 }
 
 .ghost-button {
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.84);
   color: var(--ink);
   font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.72);
 }
 
 .upgrade-strip {
@@ -482,6 +498,7 @@ select {
   background: #fffefa;
   color: var(--ink);
   outline: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
 input,
@@ -562,7 +579,7 @@ select:focus {
 .square-button {
   width: 44px;
   height: 44px;
-  background: var(--tomato);
+  background: linear-gradient(135deg, var(--tomato), #9f3c31);
   color: white;
   font-size: 24px;
   line-height: 1;
@@ -611,9 +628,10 @@ select:focus {
 
 .recipe-card {
   display: grid;
-  gap: 14px;
+  grid-template-rows: auto 1fr;
+  gap: 0;
   min-height: 360px;
-  padding: 12px;
+  padding: 0;
   border: 1px solid rgba(221, 228, 220, 0.9);
   border-radius: 8px;
   background:
@@ -631,14 +649,10 @@ select:focus {
 
 .recipe-art {
   position: relative;
-  min-height: 168px;
+  min-height: 182px;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 8px 8px 0 0;
   background: var(--art-bg);
-}
-
-.recipe-art::before {
-  box-shadow: inset 0 -12px rgba(0, 0, 0, 0.08), 0 18px 36px rgba(32, 35, 33, 0.12);
 }
 
 .recipe-art.has-photo {
@@ -669,7 +683,7 @@ select:focus {
   border-radius: 50%;
   background: var(--art-main);
   transform: translateX(-50%);
-  box-shadow: inset 0 -12px rgba(0, 0, 0, 0.08);
+  box-shadow: inset 0 -12px rgba(0, 0, 0, 0.08), 0 18px 36px rgba(32, 35, 33, 0.12);
 }
 
 .recipe-art::after {
@@ -679,6 +693,35 @@ select:focus {
   height: 34px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.68);
+}
+
+.recipe-art.has-photo::after {
+  display: block;
+  inset: auto 0 0;
+  width: auto;
+  height: 70px;
+  border-radius: 0;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.36));
+}
+
+.image-badge {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 1;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--deep);
+  font-size: 12px;
+  font-weight: 900;
+  backdrop-filter: blur(12px);
+}
+
+.recipe-card-body {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
 }
 
 .recipe-card h3 {
@@ -709,6 +752,11 @@ select:focus {
   font-weight: 800;
 }
 
+.card-meta span:first-child {
+  background: #e7f0e8;
+  color: var(--green);
+}
+
 .card-topline {
   display: flex;
   justify-content: space-between;
@@ -716,10 +764,19 @@ select:focus {
 }
 
 .mini-fav {
-  border: 0;
-  background: transparent;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  z-index: 1;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.88);
   color: var(--tomato);
   font-size: 22px;
+  box-shadow: 0 10px 24px rgba(32, 35, 33, 0.12);
+  backdrop-filter: blur(12px);
 }
 
 .recipe-dialog {
@@ -980,21 +1037,51 @@ li {
 }
 
 @media (max-width: 560px) {
+  body {
+    background:
+      linear-gradient(180deg, rgba(31, 52, 41, 0.1), transparent 280px),
+      #eef3ec;
+  }
+
   .app-shell {
-    width: min(100% - 20px, 1180px);
-    padding-top: 14px;
+    width: min(100% - 18px, 1180px);
+    padding-top: 10px;
   }
 
   .topbar {
-    align-items: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-color: rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 10px 28px rgba(31, 52, 41, 0.08);
+  }
+
+  .topbar .eyebrow {
+    font-size: 11px;
+  }
+
+  .topbar h1 {
+    font-size: 30px;
   }
 
   .top-actions {
     width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
 
   .top-actions button {
-    flex: 1;
+    width: 100%;
+    min-height: 42px;
+    padding: 0 10px;
+    font-size: 15px;
+  }
+
+  body.large-text .top-actions {
+    grid-template-columns: 1fr;
   }
 
   .icon-text-button {
@@ -1002,16 +1089,166 @@ li {
   }
 
   .hero {
-    min-height: auto;
-    padding: 20px;
+    min-height: 0;
+    margin: 12px 0 12px;
+    padding: 22px;
+    background:
+      radial-gradient(circle at 92% 0%, rgba(228, 184, 75, 0.28), transparent 34%),
+      linear-gradient(145deg, #17271f, #2f6c4f 64%, #456c86);
+    box-shadow: 0 20px 50px rgba(31, 52, 41, 0.24);
   }
 
   .hero-copy h2 {
-    font-size: 38px;
+    font-size: 42px;
+    line-height: 1.02;
+  }
+
+  .hero-copy p:not(.eyebrow) {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .hero-visual {
+    display: none;
+  }
+
+  .hero-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
   }
 
   .hero-metrics span {
+    width: auto;
+    min-height: 48px;
+    padding: 8px 6px;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 16px;
+  }
+
+  .hero-actions button {
+    min-width: 0;
+    padding: 0 10px;
+  }
+
+  .upgrade-strip {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .upgrade-strip div {
+    min-height: 82px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 8px 22px rgba(31, 52, 41, 0.07);
+  }
+
+  .upgrade-strip strong {
+    font-size: 20px;
+  }
+
+  .upgrade-strip span {
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .guide-flow {
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 12px 30px rgba(31, 52, 41, 0.08);
+  }
+
+  .flow-heading h2 {
+    font-size: 25px;
+  }
+
+  .guide-flow ol {
+    gap: 8px;
+    counter-reset: flow;
+  }
+
+  .guide-flow li {
+    position: relative;
+    min-height: 0;
+    padding: 12px 12px 12px 46px;
+    border-left: 0;
+    background: #fbfcf8;
+    box-shadow: none;
+  }
+
+  .guide-flow li::before {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--green);
+    color: white;
+    content: counter(flow);
+    counter-increment: flow;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  .guide-flow strong {
+    margin-bottom: 4px;
+    font-size: 17px;
+  }
+
+  .guide-flow span {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .controls,
+  .pantry-panel,
+  .recipe-section {
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 12px 30px rgba(31, 52, 41, 0.08);
+  }
+
+  .filter-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .filter-pill {
     width: 100%;
+    padding: 0 8px;
+    font-size: 15px;
+  }
+
+  .recipe-card {
+    min-height: 0;
+  }
+
+  .recipe-art {
+    min-height: 150px;
+  }
+
+  .recipe-card-body {
+    padding: 13px;
+  }
+
+  .card-meta {
+    gap: 6px;
+  }
+
+  .card-meta span {
+    font-size: 11px;
   }
 
   .dialog-photo {
