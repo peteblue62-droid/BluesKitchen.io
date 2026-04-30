@@ -14,15 +14,17 @@
     <main class="app-shell">
       <section class="topbar" aria-label="应用顶部">
         <div>
-          <p class="eyebrow">厨房助手</p>
+          <p class="eyebrow">智能厨房助手</p>
           <h1>一餐一谱</h1>
         </div>
-        <button class="mode-button" id="largeTextMode" type="button" aria-pressed="false">长者大字模式</button>
-        <button class="install-button hidden" id="installApp" type="button">安装</button>
-        <button class="icon-text-button" id="openAddRecipe" type="button">
-          <span aria-hidden="true">＋</span>
-          新菜谱
-        </button>
+        <div class="top-actions">
+          <button class="mode-button" id="largeTextMode" type="button" aria-pressed="false">长者大字模式</button>
+          <button class="install-button hidden" id="installApp" type="button">安装</button>
+          <button class="icon-text-button" id="openAddRecipe" type="button">
+            <span aria-hidden="true">＋</span>
+            新菜谱
+          </button>
+        </div>
       </section>
 
       <section class="hero" aria-label="今日推荐">
@@ -30,6 +32,11 @@
           <p class="eyebrow">今日灵感</p>
           <h2 id="featuredTitle">番茄牛腩饭</h2>
           <p id="featuredSummary">浓郁番茄汁包住软糯牛腩，适合提前炖一锅，第二天也好吃。</p>
+          <div class="hero-metrics" aria-label="应用数据">
+            <span>1000 道菜谱</span>
+            <span>全量配图</span>
+            <span>手机可安装</span>
+          </div>
           <div class="hero-actions">
             <button class="primary-button" id="viewFeatured" type="button">查看做法</button>
             <button class="ghost-button" id="randomRecipe" type="button">换一道</button>
