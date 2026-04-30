@@ -998,7 +998,7 @@ aiForm.addEventListener("submit", async (event) => {
     const answer = aiApiUrl ? await askProxyAI(question) : await askFreeAI(question);
     aiAnswer.textContent = answer || "AI 没有返回内容。";
   } catch (error) {
-    aiAnswer.textContent = `AI 请求失败：${error.message}`;
+    aiAnswer.textContent = buildOfflineAnswer(question, error.message);
   }
 });
 
@@ -1037,6 +1037,57 @@ async function askFreeAI(question) {
   const response = await fetch(`${FREE_AI_TEXT_URL}${encodeURIComponent(prompt)}`);
   if (!response.ok) throw new Error("免费 AI 接口暂时不可用");
   return response.text();
+}
+
+function buildOfflineAnswer(question, reason = "") {
+  const normalized = question.toLowerCase();
+  if (normalized.includes("采购") || normalized.includes("买") || normalized.includes("清单")) {
+    return buildShoppingListAnswer(reason);
+  }
+  if (normalized.includes("生成") || normalized.includes("菜谱") || normalized.includes("步骤")) {
+    return buildRecipeDraftAnswer(reason);
+  }
+  return buildRecommendationAnswer(reason);
+}
+
+function buildRecommendationAnswer(reason) {
+  const picks = getVisibleRecipes().slice(0, 3);
+  return [
+    reason ? `在线 AI 暂时不可用，已改用本地菜谱推荐。\n原因：${reason}` : "已用本地菜谱推荐：",
+    ...picks.map((recipe, index) => {
+      const ingredients = recipe.ingredients.slice(0, 5).map((item) => `${item}${getIngredientAmount(item, 2)}`).join("、");
+      return `${index + 1}. ${recipe.title}\n适合理由：${recipe.description}\n用料：${ingredients}\n做法：${recipe.steps.slice(0, 3).join("；")}`;
+    })
+  ].join("\n\n");
+}
+
+function buildRecipeDraftAnswer(reason) {
+  const recipe = getVisibleRecipes()[0] || state.recipes[0];
+  return [
+    reason ? `在线 AI 暂时不可用，已用本地菜谱生成详细做法。\n原因：${reason}` : "本地生成菜谱：",
+    `菜名：${recipe.title}`,
+    `时间：${recipe.time}`,
+    `难度：${recipe.difficulty}`,
+    `用料（2人份）：${recipe.ingredients.map((item) => `${item}${getIngredientAmount(item, 2)}`).join("、")}`,
+    `步骤：\n${recipe.steps.map((step, index) => `${index + 1}. ${step}`).join("\n")}`,
+    `提示：${recipe.tip || getRecipeTip(recipe)}`
+  ].join("\n\n");
+}
+
+function buildShoppingListAnswer(reason) {
+  const picks = getVisibleRecipes().slice(0, 3);
+  const wanted = Array.from(new Set(picks.flatMap((recipe) => recipe.ingredients)));
+  const missing = wanted.filter((item) => !state.pantry.some((pantryItem) => item.includes(pantryItem) || pantryItem.includes(item)));
+  const vegetables = missing.filter((item) => /(菜|番茄|土豆|青椒|胡萝卜|香菇|蘑菇|南瓜|黄瓜|洋葱|莲藕|白菜|玉米)/.test(item));
+  const proteins = missing.filter((item) => /(鸡|牛|猪|肉|鱼|虾|蛋|豆腐|排骨|羊|鸭|蛤蜊|鱿鱼)/.test(item));
+  const seasonings = missing.filter((item) => !vegetables.includes(item) && !proteins.includes(item));
+  return [
+    reason ? `在线 AI 暂时不可用，已用本地菜谱生成采购清单。\n原因：${reason}` : "本地生成采购清单：",
+    `推荐参考菜：${picks.map((recipe) => recipe.title).join("、")}`,
+    `蔬菜：${vegetables.join("、") || "暂无"}`,
+    `肉蛋豆制品：${proteins.join("、") || "暂无"}`,
+    `调料/其他：${seasonings.join("、") || "暂无"}`
+  ].join("\n\n");
 }
 
 function buildAiPrompt(question) {

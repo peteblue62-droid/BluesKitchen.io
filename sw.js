@@ -1,4 +1,4 @@
-const CACHE_NAME = "recipe-app-v11";
+const CACHE_NAME = "recipe-app-v12";
 const FILES = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
