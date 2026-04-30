@@ -460,6 +460,7 @@ h2 {
 
 .controls,
 .pantry-panel,
+.ai-panel,
 .recipe-section {
   border: 1px solid rgba(221, 228, 220, 0.9);
   border-radius: 8px;
@@ -553,14 +554,26 @@ select:focus {
 }
 
 .pantry-panel,
+.ai-panel,
 .recipe-section {
   padding: 20px;
   box-shadow: 0 14px 42px rgba(36, 43, 38, 0.07);
 }
 
-.pantry-panel {
+.pantry-panel,
+.ai-panel {
   position: sticky;
   top: 110px;
+}
+
+.ai-panel {
+  grid-column: 1;
+  top: 360px;
+}
+
+.recipe-section {
+  grid-column: 2;
+  grid-row: 1 / span 2;
 }
 
 .text-button {
@@ -617,6 +630,56 @@ select:focus {
 .empty-state {
   color: var(--muted);
   line-height: 1.6;
+}
+
+.ai-quick-row {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.ai-quick-row button {
+  min-height: 42px;
+  border: 1px solid rgba(221, 228, 220, 0.95);
+  border-radius: 8px;
+  background: #f8faf6;
+  color: var(--deep);
+  font-weight: 800;
+  text-align: left;
+  padding: 0 12px;
+}
+
+.ai-form,
+.ai-settings {
+  display: grid;
+  gap: 10px;
+}
+
+.ai-settings {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(221, 228, 220, 0.95);
+}
+
+.ai-form label,
+.ai-settings label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.ai-answer {
+  min-height: 92px;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid rgba(221, 228, 220, 0.95);
+  border-radius: 8px;
+  background: #fffefa;
+  color: var(--ink);
+  line-height: 1.65;
+  white-space: pre-wrap;
 }
 
 .recipe-list {
@@ -1031,6 +1094,13 @@ li {
     position: static;
   }
 
+  .ai-panel,
+  .recipe-section {
+    grid-column: auto;
+    grid-row: auto;
+    position: static;
+  }
+
   .content-grid {
     gap: 14px;
   }
@@ -1214,6 +1284,7 @@ li {
 
   .controls,
   .pantry-panel,
+  .ai-panel,
   .recipe-section {
     padding: 14px;
     background: rgba(255, 255, 255, 0.92);

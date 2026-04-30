@@ -1,0 +1,6 @@
+name = "recipe-doubao-proxy"
+main = "worker/doubao-worker.js"
+compatibility_date = "2026-04-30"
+
+[vars]
+ARK_MODEL = "doubao-seed-1-8-251228"

@@ -507,8 +507,15 @@ const timePlanList = document.querySelector("#timePlanList");
 const addDialog = document.querySelector("#addDialog");
 const addRecipeForm = document.querySelector("#addRecipeForm");
 const installApp = document.querySelector("#installApp");
+const aiForm = document.querySelector("#aiForm");
+const aiQuestion = document.querySelector("#aiQuestion");
+const aiAnswer = document.querySelector("#aiAnswer");
+const aiSettingsForm = document.querySelector("#aiSettingsForm");
+const aiApiUrlInput = document.querySelector("#aiApiUrlInput");
 let deferredInstallPrompt = null;
 let activeServings = 2;
+let aiApiUrl = localStorage.getItem("aiApiUrl") || "";
+const FREE_AI_TEXT_URL = "https://gen.pollinations.ai/text/";
 
 const ingredientAmounts = {
   牛腩: "300克",
@@ -974,6 +981,79 @@ document.querySelector("#randomRecipe").addEventListener("click", () => {
 
 document.querySelector("#openAddRecipe").addEventListener("click", () => addDialog.showModal());
 document.querySelector("#closeAddDialog").addEventListener("click", () => addDialog.close());
+
+document.querySelectorAll("[data-ai-prompt]").forEach((button) => {
+  button.addEventListener("click", () => {
+    aiQuestion.value = button.dataset.aiPrompt;
+    aiQuestion.focus();
+  });
+});
+
+aiForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const question = aiQuestion.value.trim();
+  if (!question) return;
+  aiAnswer.textContent = aiApiUrl ? "豆包正在思考..." : "免费 AI 正在思考...";
+  try {
+    const answer = aiApiUrl ? await askProxyAI(question) : await askFreeAI(question);
+    aiAnswer.textContent = answer || "AI 没有返回内容。";
+  } catch (error) {
+    aiAnswer.textContent = `AI 请求失败：${error.message}`;
+  }
+});
+
+aiApiUrlInput.value = aiApiUrl;
+aiAnswer.textContent = aiApiUrl ? "已配置豆包 Worker，AI 做菜助手会优先调用豆包。" : aiAnswer.textContent;
+
+aiSettingsForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  aiApiUrl = aiApiUrlInput.value.trim().replace(/\/$/, "");
+  if (aiApiUrl) {
+    localStorage.setItem("aiApiUrl", aiApiUrl);
+    aiAnswer.textContent = "豆包地址已保存。现在提问会优先调用豆包 API。";
+  } else {
+    localStorage.removeItem("aiApiUrl");
+    aiAnswer.textContent = "已清空豆包地址。现在会使用免费 AI 接口。";
+  }
+});
+
+async function askProxyAI(question) {
+  const response = await fetch(aiApiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      question,
+      pantry: state.pantry,
+      favorites: getFavoriteRecipeTitles()
+    })
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "请求失败");
+  return data.answer;
+}
+
+async function askFreeAI(question) {
+  const prompt = buildAiPrompt(question);
+  const response = await fetch(`${FREE_AI_TEXT_URL}${encodeURIComponent(prompt)}`);
+  if (!response.ok) throw new Error("免费 AI 接口暂时不可用");
+  return response.text();
+}
+
+function buildAiPrompt(question) {
+  return [
+    "你是一位中文家庭做饭助手。回答要实用、清楚、适合手机阅读。",
+    "涉及菜谱时给出人数、用量、步骤、火候、注意事项和替代食材。",
+    `冰箱食材：${state.pantry.join("、") || "未填写"}`,
+    `收藏菜谱：${getFavoriteRecipeTitles().join("、") || "无"}`,
+    `用户问题：${question}`
+  ].join("\n");
+}
+
+function getFavoriteRecipeTitles() {
+  return state.favorites
+    .map((id) => state.recipes.find((recipe) => recipe.id === id)?.title)
+    .filter(Boolean);
+}
 
 window.addEventListener("beforeinstallprompt", (event) => {
   event.preventDefault();

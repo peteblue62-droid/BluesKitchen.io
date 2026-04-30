@@ -126,6 +126,35 @@
           <p class="panel-note">添加食材后，列表会优先显示更匹配的菜谱。</p>
         </aside>
 
+        <aside class="ai-panel" aria-label="AI 做菜助手">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">免费 AI</p>
+              <h2>AI 做菜助手</h2>
+            </div>
+          </div>
+          <div class="ai-quick-row">
+            <button type="button" data-ai-prompt="根据我冰箱里的食材，推荐3道适合今天做的菜。">推荐今天吃什么</button>
+            <button type="button" data-ai-prompt="把我选的食材生成一道详细菜谱，包含用量、步骤和注意事项。">生成新菜谱</button>
+            <button type="button" data-ai-prompt="给我一份今晚做饭的采购清单，按蔬菜、肉蛋、调料分类。">生成采购清单</button>
+          </div>
+          <form class="ai-form" id="aiForm">
+            <label>
+              问豆包
+              <textarea id="aiQuestion" placeholder="例如：家里有鸡蛋、番茄、豆腐，老人小孩都能吃，今晚做什么？"></textarea>
+            </label>
+            <button class="primary-button" type="submit">发送</button>
+          </form>
+          <form class="ai-settings" id="aiSettingsForm">
+            <label>
+              豆包 Worker 地址
+              <input id="aiApiUrlInput" type="url" placeholder="https://你的-worker地址" />
+            </label>
+            <button class="text-button" type="submit">保存豆包地址</button>
+          </form>
+          <div class="ai-answer" id="aiAnswer">已接入免费 AI 接口，可以直接提问。以后也可以换成豆包代理。</div>
+        </aside>
+
         <section class="recipe-section" aria-label="食谱列表">
           <div class="section-heading">
             <h2>食谱</h2>
